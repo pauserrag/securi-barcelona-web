@@ -47,16 +47,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Corporate theme colors
+        // Corporate theme colors - Securi Barcelona
         navy: {
           DEFAULT: "hsl(var(--navy))",
           light: "hsl(var(--navy-light))",
           dark: "hsl(var(--navy-dark))",
         },
-        orange: {
-          DEFAULT: "hsl(var(--orange))",
-          light: "hsl(var(--orange-light))",
-          dark: "hsl(var(--orange-dark))",
+        "blue-light": {
+          DEFAULT: "hsl(var(--blue-light))",
+          hover: "hsl(var(--blue-light-hover))",
+          light: "hsl(var(--blue-light-light))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

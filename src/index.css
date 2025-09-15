@@ -38,22 +38,22 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* Corporate theme colors */
-    --navy: 210 100% 12%;
-    --navy-light: 210 40% 24%;
-    --navy-dark: 210 100% 8%;
-    --orange: 25 95% 53%;
-    --orange-light: 25 95% 65%;
-    --orange-dark: 25 95% 45%;
+    /* Corporate theme colors - Securi Barcelona */
+    --navy: 225 83% 20%;        /* #1e3a8a - azul marino */
+    --navy-light: 225 83% 30%;   /* más claro */
+    --navy-dark: 225 83% 15%;    /* más oscuro */
+    --blue-light: 224 76% 48%;   /* #2563eb - azul claro */
+    --blue-light-hover: 224 76% 40%;
+    --blue-light-light: 224 76% 60%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--navy)), hsl(var(--navy-light)));
-    --gradient-accent: linear-gradient(135deg, hsl(var(--orange)), hsl(var(--orange-light)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--navy)) 0%, hsl(var(--navy-light)) 50%, hsl(var(--orange)) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--navy)), hsl(var(--blue-light)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--blue-light)), hsl(var(--blue-light-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--navy)) 0%, hsl(var(--navy-light)) 50%, hsl(var(--blue-light)) 100%);
 
     /* Shadows */
     --shadow-elegant: 0 10px 30px -10px hsl(var(--navy) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--orange) / 0.4);
+    --shadow-glow: 0 0 40px hsl(var(--blue-light) / 0.4);
 
     --sidebar-background: 0 0% 98%;
 

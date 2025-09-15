@@ -15,10 +15,11 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // Corporate variants
+        // Corporate variants - Securi Barcelona
         corporate: "bg-gradient-primary text-white hover:shadow-elegant hover:scale-[1.02]",
-        cta: "bg-gradient-accent text-white hover:shadow-glow hover:scale-[1.02] font-semibold",
-        demo: "bg-orange text-white hover:bg-orange-dark shadow-elegant hover:shadow-glow",
+        cta: "bg-blue-light text-white hover:bg-blue-light-hover shadow-elegant hover:shadow-glow font-semibold",
+        demo: "bg-navy text-white hover:bg-navy-dark shadow-elegant hover:shadow-glow",
+        "outline-light": "border-2 border-white text-white hover:bg-white hover:text-navy",
       },
       size: {
         default: "h-10 px-4 py-2",

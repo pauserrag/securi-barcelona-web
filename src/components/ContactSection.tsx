@@ -1,174 +1,196 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 const ContactSection = () => {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    empresa: "",
+    email: "",
+    telefono: "",
+    mensaje: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Placeholder para endpoint de Formspree
+      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "¡Mensaje enviado correctamente!",
+          description: "Nos pondremos en contacto contigo en las próximas 24 horas.",
+        });
+        setFormData({ empresa: "", email: "", telefono: "", mensaje: "" });
+      } else {
+        throw new Error("Error al enviar el formulario");
+      }
+    } catch (error) {
+      toast({
+        title: "Error al enviar el mensaje",
+        description: "Por favor, inténtalo de nuevo o contacta directamente por email.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <section className="py-20 bg-background">
+    <section id="contacto" className="py-20 bg-white">
       <div className="container mx-auto px-6">
-        <div className="text-center space-y-4 mb-16">
-          <h2 className="text-4xl font-bold text-navy">Contacta con Nosotros</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            ¿Listo para proteger tu empresa? Solicita una demo gratuita y descubre 
-            cómo podemos mejorar la ciberseguridad de tu organización.
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-navy mb-4">
+            Solicita tu demo gratuita
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Descubre cómo podemos mejorar la ciberseguridad de tu empresa. 
+            Te contactaremos para programar una demostración personalizada.
           </p>
         </div>
-        
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Formulario de Contacto */}
-          <Card className="border-2 hover:border-orange/50 transition-all duration-300 hover:shadow-elegant">
+
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <Card className="shadow-elegant">
             <CardHeader>
-              <CardTitle className="text-2xl text-navy">Solicita una Demo Gratuita</CardTitle>
+              <CardTitle className="text-2xl text-navy">Envíanos tu consulta</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="nombre">Nombre *</Label>
-                    <Input 
-                      id="nombre" 
-                      placeholder="Tu nombre completo"
-                      className="border-2 focus:border-orange"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="empresa">Empresa *</Label>
-                    <Input 
-                      id="empresa" 
-                      placeholder="Nombre de la empresa"
-                      className="border-2 focus:border-orange"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Corporativo *</Label>
-                    <Input 
-                      id="email" 
-                      type="email"
-                      placeholder="email@empresa.com"
-                      className="border-2 focus:border-orange"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="telefono">Teléfono</Label>
-                    <Input 
-                      id="telefono" 
-                      placeholder="+34 600 000 000"
-                      className="border-2 focus:border-orange"
-                    />
-                  </div>
-                </div>
-                
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="empleados">Número de Empleados</Label>
-                  <select className="w-full p-3 border-2 rounded-md focus:border-orange focus:outline-none">
-                    <option value="">Selecciona el rango</option>
-                    <option value="1-50">1-50 empleados</option>
-                    <option value="51-100">51-100 empleados</option>
-                    <option value="101-500">101-500 empleados</option>
-                    <option value="500+">Más de 500 empleados</option>
-                  </select>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="mensaje">Cuéntanos sobre tu empresa</Label>
-                  <Textarea 
-                    id="mensaje"
-                    placeholder="Describe brevemente tu empresa y qué te interesa de nuestros servicios..."
-                    className="border-2 focus:border-orange min-h-[120px]"
+                  <Label htmlFor="empresa">Empresa *</Label>
+                  <Input
+                    id="empresa"
+                    name="empresa"
+                    type="text"
+                    required
+                    value={formData.empresa}
+                    onChange={handleInputChange}
+                    placeholder="Nombre de tu empresa"
                   />
                 </div>
-                
-                <div className="space-y-4">
-                  <Button variant="cta" size="lg" className="w-full">
-                    Solicitar Demo Gratuita
-                  </Button>
-                  <p className="text-sm text-muted-foreground text-center">
-                    * Te contactaremos en menos de 24 horas
-                  </p>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email *</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="tu@empresa.com"
+                  />
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="telefono">Teléfono (opcional)</Label>
+                  <Input
+                    id="telefono"
+                    name="telefono"
+                    type="tel"
+                    value={formData.telefono}
+                    onChange={handleInputChange}
+                    placeholder="+34 600 000 000"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="mensaje">Mensaje</Label>
+                  <Textarea
+                    id="mensaje"
+                    name="mensaje"
+                    rows={4}
+                    value={formData.mensaje}
+                    onChange={handleInputChange}
+                    placeholder="Cuéntanos sobre las necesidades de ciberseguridad de tu empresa..."
+                  />
+                </div>
+
+                <Button 
+                  type="submit" 
+                  variant="cta" 
+                  size="lg"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Enviando..." : "Solicitar demo gratuita"}
+                </Button>
               </form>
             </CardContent>
           </Card>
-          
-          {/* Información de Contacto */}
+
           <div className="space-y-8">
-            <Card className="bg-gradient-primary text-white border-0">
+            <Card className="shadow-elegant">
               <CardHeader>
-                <CardTitle className="text-2xl">Información de Contacto</CardTitle>
+                <CardTitle className="text-xl text-navy">Contacto directo</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-5 h-5" />
-                  </div>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-blue-light" />
                   <div>
-                    <h4 className="font-semibold mb-1">Oficina Principal</h4>
-                    <p className="text-white/90">
-                      Passeig de Gràcia, 101<br />
-                      08008 Barcelona, España
-                    </p>
+                    <p className="font-semibold">Barcelona, España</p>
+                    <p className="text-gray-600">Servicios en toda España</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <Phone className="w-5 h-5" />
-                  </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-blue-light" />
                   <div>
-                    <h4 className="font-semibold mb-1">Teléfono</h4>
-                    <p className="text-white/90">+34 93 000 0000</p>
+                    <p className="font-semibold">info@securibarcelona.com</p>
+                    <p className="text-gray-600">Respuesta en 24h</p>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <Mail className="w-5 h-5" />
-                  </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-blue-light" />
                   <div>
-                    <h4 className="font-semibold mb-1">Email</h4>
-                    <p className="text-white/90">info@cybersecurebcn.com</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                    <Clock className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Horario</h4>
-                    <p className="text-white/90">
-                      Lunes a Viernes: 9:00 - 18:00<br />
-                      Soporte 24/7 disponible
-                    </p>
+                    <p className="font-semibold">+34 93 000 0000</p>
+                    <p className="text-gray-600">Lun-Vie 9:00-18:00</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            
-            <div className="bg-orange/10 border border-orange/20 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-navy mb-3">¿Por qué elegirnos?</h3>
-              <ul className="space-y-2 text-navy/80">
+
+            <div className="bg-blue-50 rounded-2xl p-6 border-l-4 border-blue-light">
+              <h3 className="text-lg font-semibold text-navy mb-3">
+                ¿Por qué elegirnos?
+              </h3>
+              <ul className="space-y-2 text-gray-700">
                 <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-orange rounded-full"></div>
-                  Experiencia local en Barcelona desde 2018
+                  <div className="w-2 h-2 bg-blue-light rounded-full"></div>
+                  Experiencia contrastada en ciberseguridad
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-orange rounded-full"></div>
-                  Certificaciones oficiales en ciberseguridad
+                  <div className="w-2 h-2 bg-blue-light rounded-full"></div>
+                  Metodología 100% segura y legal
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-orange rounded-full"></div>
-                  Soporte técnico en español
+                  <div className="w-2 h-2 bg-blue-light rounded-full"></div>
+                  Cumplimiento normativo garantizado
                 </li>
                 <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-orange rounded-full"></div>
-                  Cumplimiento total con normativas españolas
+                  <div className="w-2 h-2 bg-blue-light rounded-full"></div>
+                  Soporte en español, desde Barcelona
                 </li>
               </ul>
             </div>
